@@ -1,0 +1,5 @@
+/Users/sookha/Desktop/Google Drive/VT/TEACHING/FL21/ECE 3514/Assignments/A_PROJECTS/P5/P5.1/P5.1_starter/build/CMakeFiles/rebuild_cache.dir
+/Users/sookha/Desktop/Google Drive/VT/TEACHING/FL21/ECE 3514/Assignments/A_PROJECTS/P5/P5.1/P5.1_starter/build/CMakeFiles/edit_cache.dir
+/Users/sookha/Desktop/Google Drive/VT/TEACHING/FL21/ECE 3514/Assignments/A_PROJECTS/P5/P5.1/P5.1_starter/build/CMakeFiles/test.dir
+/Users/sookha/Desktop/Google Drive/VT/TEACHING/FL21/ECE 3514/Assignments/A_PROJECTS/P5/P5.1/P5.1_starter/build/CMakeFiles/submission.dir
+/Users/sookha/Desktop/Google Drive/VT/TEACHING/FL21/ECE 3514/Assignments/A_PROJECTS/P5/P5.1/P5.1_starter/build/CMakeFiles/student_tests.dir
