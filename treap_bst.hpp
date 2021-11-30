@@ -5,9 +5,8 @@
 
 #include "abstract_bst.hpp"
 
-template <typename KeyType, typename ValueType>
-class TreapBST : public AbstractBST<KeyType, ValueType>
-{
+template<typename KeyType, typename ValueType>
+class TreapBST : public AbstractBST<KeyType, ValueType> {
 public:
     /** Default contructor. */
     TreapBST();
@@ -35,30 +34,38 @@ public:
 private:
     /* Random number generator. */
     std::mt19937 rndgen;
-    
+
     /* Node struct with key, data, random priority, and parent, left child, and right child pointers. */
-    template <typename K, typename V>
-    struct Node
-    {
+    template<typename K, typename V>
+    struct Node {
         K key;
         V data;
         std::mt19937::result_type priority;
-        Node* parent;
-        Node* childl;
-        Node* childr;
-        
-        Node(const K& k, const V& d, Node* p = nullptr)
-        : key(k)
-        , data(d)
-        , parent(p)
-        , childl(nullptr)
-        , childr(nullptr)
-        {
+        Node *parent;
+        Node *childl;
+        Node *childr;
+
+        Node(const K &k, const V &d, Node *p = nullptr)
+                : key(k), data(d), parent(p), childl(nullptr), childr(nullptr) {
         }
     };
 
+    Node<KeyType, ValueType> *root;
+
     // You may add private member variables/methods as needed.
-    
+
+    // Reorders treap on priority
+    void bubbleUp(Node<KeyType, ValueType> *node);
+
+    // Inserts a node into the treap based on key ordering
+    void insertKey(Node<KeyType, ValueType> *parent, Node<KeyType, ValueType> *node);
+
+    // Counts sums the height of the treap
+    int count(Node<KeyType, ValueType> *node);
+
+    // Recursively deletes all nodes in the treap
+    void deleteTreap(Node<KeyType, ValueType> *node);
+
 };
 
 #include "treap_bst.txx"
