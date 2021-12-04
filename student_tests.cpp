@@ -35,3 +35,26 @@ TEST_CASE("Test remove", "[Treap]") {
     tr.remove(100);
     REQUIRE(tr.empty());
 }
+
+TEST_CASE("Test search", "[Treap]") {
+    TreapBST<int, int> tr;
+    bool found = false;
+    tr.insert(100, 200);
+    tr.search(100, found);
+    REQUIRE(found);
+    found = false;
+    tr.insert(101, 200);
+    tr.search(101, found);
+    REQUIRE(found);
+    found = false;
+    tr.insert(102, 200);
+    tr.search(102, found);
+    REQUIRE(found);
+    found = false;
+    tr.insert(103, 200);
+    tr.search(103, found);
+    REQUIRE(found);
+    tr.remove(103);
+    tr.search(103, found);
+    REQUIRE_FALSE(found);
+}
