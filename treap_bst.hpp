@@ -57,6 +57,10 @@ private:
     // Reorders treap on priority
     void bubbleUp(Node<KeyType, ValueType> *node);
 
+    void rotateLeft(Node<KeyType, ValueType> *node);
+
+    void rotateRight(Node<KeyType, ValueType> *node);
+
     // Inserts a node into the treap based on key ordering
     void insertKey(Node<KeyType, ValueType> *parent, Node<KeyType, ValueType> *node);
 

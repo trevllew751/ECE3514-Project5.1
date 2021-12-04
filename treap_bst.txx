@@ -129,36 +129,64 @@ int TreapBST<KeyType, ValueType>::count(TreapBST::Node<KeyType, ValueType> *node
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::bubbleUp(TreapBST::Node<KeyType, ValueType> *node) {
     if (node != root && node->priority > node->parent->priority) {
-        auto temp = node->parent;
-        Node <KeyType, ValueType> *parentParent = nullptr;
-        if (temp != root) {
-            parentParent = temp->parent;
-        }
-        if (node == node->parent->childl) {         // Left child
-            node->parent->childl = node->childr;    // Moves node right to parent left
-            if (node->childr) {
-                node->childr->parent = node->parent;    // Associates old right to parent
-            }
-            node->parent = parentParent;    // Sets node as "root"
-            node->childr = temp;                    // Sets node right to old parent
-            node->childr->parent = node;            // Associates old parent to node
-        } else {                                    // Right child
-            node->parent->childr = node->childl;    // Moves node left to parent right
-            if (node->childl) {
-                node->childl->parent = node->parent;    // Associates old left to parent
-            }
-            node->parent = parentParent;    // Sets node as "root"
-            node->childl = temp;                    // Sets node left to old parent
-            node->childl->parent = node;            // Associates old parent to node
-        }
-        if (temp == root) {
-            root = node;
-        } else if (temp == parentParent->childl) {
-            parentParent->childl = node;
-        } else {
-            parentParent->childr = node;
+        if (node == node->parent->childl) {             // Left child, right rotation
+            rotateRight(node);
+        } else {                                        // Right child, left rotation
+            rotateLeft(node);
         }
         bubbleUp(node);
+    }
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::rotateLeft(TreapBST::Node<KeyType, ValueType> *node) {
+    auto temp = node->parent;
+    Node <KeyType, ValueType> *parentParent = nullptr;
+
+    if (temp != root) {
+        parentParent = temp->parent;
+    }
+
+    node->parent->childr = node->childl;        // Moves node left to parent right
+    if (node->childl) {
+        node->childl->parent = node->parent;    // Associates old left to parent
+    }
+    node->parent = parentParent;                // Sets node as "root"
+    node->childl = temp;                        // Sets node left to old parent
+    node->childl->parent = node;                // Associates old parent to node
+
+    if (temp == root) {
+        root = node;
+    } else if (temp == parentParent->childl) {
+        parentParent->childl = node;
+    } else {
+        parentParent->childr = node;
+    }
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::rotateRight(TreapBST::Node<KeyType, ValueType> *node) {
+    auto temp = node->parent;
+    Node <KeyType, ValueType> *parentParent = nullptr;
+
+    if (temp != root) {
+        parentParent = temp->parent;
+    }
+
+    node->parent->childl = node->childr;        // Moves node right to parent left
+    if (node->childr) {
+        node->childr->parent = node->parent;    // Associates old right to parent
+    }
+    node->parent = parentParent;                // Sets node as "root"
+    node->childr = temp;                        // Sets node right to old parent
+    node->childr->parent = node;                // Associates old parent to node
+
+    if (temp == root) {
+        root = node;
+    } else if (temp == parentParent->childl) {
+        parentParent->childl = node;
+    } else {
+        parentParent->childr = node;
     }
 }
 
