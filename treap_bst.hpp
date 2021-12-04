@@ -66,6 +66,12 @@ private:
     // Recursively deletes all nodes in the treap
     void deleteTreap(Node<KeyType, ValueType> *node);
 
+    // Searches the tree for the given key
+    ValueType searchTree(Node<KeyType, ValueType> *node, const KeyType &key, bool &found);
+
+    // Deletes a node from tree
+    void removeKey(Node<KeyType, ValueType> *parent, Node<KeyType, ValueType> *node);
+
 };
 
 #include "treap_bst.txx"
