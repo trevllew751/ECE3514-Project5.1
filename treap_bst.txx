@@ -99,13 +99,49 @@ void TreapBST<KeyType, ValueType>::insert(const KeyType &key, const ValueType &v
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::remove(const KeyType &key) {
-
+    removeKey(root, key);
 }
 
 template<typename KeyType, typename ValueType>
-void TreapBST<KeyType, ValueType>::removeKey(TreapBST::Node<KeyType, ValueType> *parent,
-                                             TreapBST::Node<KeyType, ValueType> *node) {
-
+void TreapBST<KeyType, ValueType>::removeKey(TreapBST::Node<KeyType, ValueType> *node, const KeyType &key) {
+    if (!node) {
+        return;
+    }
+    if (key != node->key) {
+        removeKey(node->childl, key);
+        removeKey(node->childr, key);
+    } else {
+        if (!node->childl && !node->childr) {           // is leaf
+            if (node->parent) {                         // not the root node
+                if (node == node->parent->childl) {
+                    node->parent->childl = nullptr;
+                } else {
+                    node->parent->childr = nullptr;
+                }
+                delete node;
+                node = nullptr;
+            } else {
+                delete root;
+                root = nullptr;
+            }
+        } else {
+            if (node->childr && !node->childl) {        // No left child
+                rotateLeft(node->childr);
+                removeKey(node->parent->childl, key);
+            } else if (node->childl && !node->childr) { // No right child
+                rotateRight(node->childl);
+                removeKey(node->parent->childr, key);
+            } else {                                    // Both children
+                if (node->childl->priority > node->childr->priority) {
+                    rotateRight(node->childl);
+                    removeKey(node->parent->childr, key);
+                } else {
+                    rotateLeft(node->childr);
+                    removeKey(node->parent->childl, key);
+                }
+            }
+        }
+    }
 }
 
 template<typename KeyType, typename ValueType>

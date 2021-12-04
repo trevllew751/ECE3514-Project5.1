@@ -74,7 +74,7 @@ private:
     ValueType searchTree(Node<KeyType, ValueType> *node, const KeyType &key, bool &found);
 
     // Deletes a node from tree
-    void removeKey(Node<KeyType, ValueType> *parent, Node<KeyType, ValueType> *node);
+    void removeKey(Node<KeyType, ValueType> *node, const KeyType &key);
 
 };
 

@@ -16,4 +16,22 @@ TEST_CASE("Test insert", "[Treap]") {
     tr.insert(102, 200);
     tr.insert(103, 200);
     REQUIRE((tr.height() == 3 || tr.height() == 2));
+    REQUIRE_FALSE(tr.empty());
+}
+
+TEST_CASE("Test remove", "[Treap]") {
+    TreapBST<int, int> tr;
+    tr.insert(100, 200);
+    REQUIRE_FALSE(tr.empty());
+    tr.remove(100);
+    REQUIRE(tr.empty());
+    tr.insert(100, 200);
+    tr.insert(101, 200);
+    tr.insert(102, 200);
+    tr.insert(103, 200);
+    tr.remove(103);
+    tr.remove(102);
+    tr.remove(101);
+    tr.remove(100);
+    REQUIRE(tr.empty());
 }
