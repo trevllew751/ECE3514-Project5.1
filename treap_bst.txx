@@ -294,3 +294,13 @@ void TreapBST<KeyType, ValueType>::printNodes(const std::string &prefix, const T
         printNodes(prefix + (isLeft ? "│   " : "    "), node->childr, false);
     }
 }
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::split(const TreapBST t, const KeyType key, TreapBST &lt, TreapBST &rt) {
+
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::merge(TreapBST &t, const TreapBST lt, const TreapBST rt) {
+
+}

@@ -30,6 +30,10 @@ public:
 
     void print();
 
+    void split (const TreapBST t, const KeyType key, TreapBST& lt, TreapBST& rt);
+
+    void merge(TreapBST& t, const TreapBST lt, const TreapBST rt);
+
     /** Get the height of the treap. */
     std::size_t height();
 
@@ -78,10 +82,13 @@ private:
     // Deletes a node from tree
     void removeKey(Node<KeyType, ValueType> *node, const KeyType &key);
 
+    // Swaps root nodes of the two trees
     void swap(TreapBST<KeyType, ValueType> &left, TreapBST<KeyType, ValueType> &right);
 
+    // Recursively copies all nodes from copyRoot to root
     void copyNodes(Node<KeyType, ValueType> *root, const Node<KeyType, ValueType> *copyRoot);
 
+    // Recursively prints the nodes of the tree
     void printNodes(const std::string& prefix, const Node<KeyType, ValueType>* node, bool isLeft);
 
 };
