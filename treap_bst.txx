@@ -3,6 +3,7 @@
 #include <stack>
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
 
 // TO DO 
 
@@ -15,11 +16,15 @@ TreapBST<KeyType, ValueType>::TreapBST() {
 
 template<typename KeyType, typename ValueType>
 TreapBST<KeyType, ValueType>::TreapBST(const TreapBST &x) {
-
+    root = new Node<KeyType, ValueType>(x.root->key, x.root->data, nullptr);
+    root->priority = x.root->priority;
+    copyNodes(root, x.root);
 }
 
 template<typename KeyType, typename ValueType>
 TreapBST<KeyType, ValueType> &TreapBST<KeyType, ValueType>::operator=(TreapBST x) {
+    TreapBST<KeyType, ValueType> temp(x);
+    swap(*this, temp);
     return *this;
 }
 
@@ -33,13 +38,9 @@ void TreapBST<KeyType, ValueType>::deleteTreap(TreapBST::Node<KeyType, ValueType
     if (node != nullptr) {
         if (node->childl != nullptr) {
             deleteTreap(node->childl);
-//            delete node->childl;
-//            node->childl = nullptr;
         }
         if (node->childr != nullptr) {
             deleteTreap(node->childr);
-//            delete node->childr;
-//            node->childr = nullptr;
         }
         delete node;
         node = nullptr;
@@ -177,7 +178,7 @@ void TreapBST<KeyType, ValueType>::bubbleUp(TreapBST::Node<KeyType, ValueType> *
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::rotateLeft(TreapBST::Node<KeyType, ValueType> *node) {
     auto temp = node->parent;
-    Node <KeyType, ValueType> *parentParent = nullptr;
+    Node<KeyType, ValueType> *parentParent = nullptr;
 
     if (temp != root) {
         parentParent = temp->parent;
@@ -203,7 +204,7 @@ void TreapBST<KeyType, ValueType>::rotateLeft(TreapBST::Node<KeyType, ValueType>
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::rotateRight(TreapBST::Node<KeyType, ValueType> *node) {
     auto temp = node->parent;
-    Node <KeyType, ValueType> *parentParent = nullptr;
+    Node<KeyType, ValueType> *parentParent = nullptr;
 
     if (temp != root) {
         parentParent = temp->parent;
@@ -245,5 +246,51 @@ void TreapBST<KeyType, ValueType>::insertKey(TreapBST::Node<KeyType, ValueType> 
             parent->childl = node;
             node->parent = parent;
         }
+    }
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::swap(TreapBST<KeyType, ValueType> &left, TreapBST<KeyType, ValueType> &right) {
+    auto *temp = left.root;
+    left.root = right.root;
+    right.root = temp;
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::copyNodes(TreapBST::Node<KeyType, ValueType> *root,
+                                             const TreapBST::Node<KeyType, ValueType> *copyRoot) {
+    if (root && copyRoot) {
+        if (copyRoot->childl) {
+            root->childl = new Node<KeyType, ValueType>(copyRoot->childl->key, copyRoot->childl->data, root);
+            root->childl->priority = copyRoot->childl->priority;
+        }
+        if (copyRoot->childr) {
+            root->childr = new Node<KeyType, ValueType>(copyRoot->childr->key, copyRoot->childr->data, root);
+            root->childr->priority = copyRoot->childr->priority;
+        }
+        copyNodes(root->childl, copyRoot->childl);
+        copyNodes(root->childr, copyRoot->childr);
+    }
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::print() {
+    printNodes("", root, false);
+}
+
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::printNodes(const std::string &prefix, const TreapBST::Node<KeyType, ValueType> *node,
+                                              bool isLeft) {
+    if (node) {
+        std::cout << prefix;
+
+        std::cout << (isLeft ? "├──" : "└──");
+
+        // print the value of the node
+        std::cout << node->key << ", " << node->priority << std::endl;
+
+        // enter the next tree level - left and right branch
+        printNodes(prefix + (isLeft ? "│   " : "    "), node->childl, true);
+        printNodes(prefix + (isLeft ? "│   " : "    "), node->childr, false);
     }
 }

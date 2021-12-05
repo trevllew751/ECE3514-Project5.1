@@ -28,6 +28,8 @@ public:
 
     void remove(const KeyType &key);
 
+    void print();
+
     /** Get the height of the treap. */
     std::size_t height();
 
@@ -75,6 +77,12 @@ private:
 
     // Deletes a node from tree
     void removeKey(Node<KeyType, ValueType> *node, const KeyType &key);
+
+    void swap(TreapBST<KeyType, ValueType> &left, TreapBST<KeyType, ValueType> &right);
+
+    void copyNodes(Node<KeyType, ValueType> *root, const Node<KeyType, ValueType> *copyRoot);
+
+    void printNodes(const std::string& prefix, const Node<KeyType, ValueType>* node, bool isLeft);
 
 };
 
