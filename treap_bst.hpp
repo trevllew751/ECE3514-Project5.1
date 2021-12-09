@@ -95,7 +95,7 @@ private:
     void splitTree(Node<KeyType, ValueType> *node, KeyType key, Node<KeyType, ValueType> *&left,
                    Node<KeyType, ValueType> *&right);
 
-    void mergeTree(Node<KeyType, ValueType> *node, Node<KeyType, ValueType> *&left, Node<KeyType, ValueType> *&right);
+    void mergeTree(Node<KeyType, ValueType> *&node, Node<KeyType, ValueType> *left, Node<KeyType, ValueType> *right);
 };
 
 #include "treap_bst.txx"

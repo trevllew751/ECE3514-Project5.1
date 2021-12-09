@@ -323,25 +323,40 @@ void TreapBST<KeyType, ValueType>::splitTree(TreapBST::Node<KeyType, ValueType> 
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::merge(TreapBST &t, const TreapBST lt, const TreapBST rt) {
-//    mergeTree(t.root, *&lt.root, *&rt.root);
+    if (lt.root->priority > rt.root->priority) {
+        copyNodes(t.root, lt.root);
+        mergeTree(*&t.root->childr, lt.root->childr, rt.root);
+    } else {
+        copyNodes(t.root, rt.root);
+        mergeTree(*&t.root->childl, lt.root, rt.root->childl);
+    }
 }
 
 template<typename KeyType, typename ValueType>
-void TreapBST<KeyType, ValueType>::mergeTree(TreapBST::Node<KeyType, ValueType> *node,
-                                             TreapBST::Node<KeyType, ValueType> *&left,
-                                             TreapBST::Node<KeyType, ValueType> *&right) {
+void TreapBST<KeyType, ValueType>::mergeTree(TreapBST::Node<KeyType, ValueType> *&node,
+                                             TreapBST::Node<KeyType, ValueType> *left,
+                                             TreapBST::Node<KeyType, ValueType> *right) {
     if (!left || !right) {
         if (left) {
-//            Node<KeyType, ValueType> *copy;
             copyNodes(node, left);
         } else {
             copyNodes(node, right);
         }
-    } else if (left->parent->key > right->parent->key) {
-        merge(left->childr, left->childr, right);
-        copyNodes(node, left);
+    } else if (left->priority > right->priority) {
+        mergeTree(*&left->childr, left->childr, right);
+        Node <KeyType, ValueType> *copy;
+        copyNodes(copy, left);
+        if (copy->childr) {
+            copy->childr->parent = copy;
+        }
+        node = copy;
     } else {
-        merge(right->childl, left, right->childl);
-        copyNodes(node, right);
+        mergeTree(*&right->childl, left, right->childl);
+        Node <KeyType, ValueType> *copy;
+        copyNodes(copy, right);
+        if (copy->childl) {
+            copy->childl->parent = copy;
+        }
+        node = copy;
     }
 }
