@@ -16,15 +16,16 @@ TreapBST<KeyType, ValueType>::TreapBST() {
 
 template<typename KeyType, typename ValueType>
 TreapBST<KeyType, ValueType>::TreapBST(const TreapBST &x) {
-    root = new Node<KeyType, ValueType>(x.root->key, x.root->data, nullptr);
-    root->priority = x.root->priority;
-    copyNodes(root, x.root);
+    if (x.root) {
+        copyNodes(root, x.root);
+    } else {
+        root = nullptr;
+    }
 }
 
 template<typename KeyType, typename ValueType>
 TreapBST<KeyType, ValueType> &TreapBST<KeyType, ValueType>::operator=(TreapBST x) {
-    TreapBST<KeyType, ValueType> temp(x);
-    swap(*this, temp);
+    swap(*this, x);
     return *this;
 }
 
@@ -35,13 +36,9 @@ TreapBST<KeyType, ValueType>::~TreapBST() {
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::deleteTreap(TreapBST::Node<KeyType, ValueType> *node) {
-    if (node != nullptr) {
-        if (node->childl != nullptr) {
-            deleteTreap(node->childl);
-        }
-        if (node->childr != nullptr) {
-            deleteTreap(node->childr);
-        }
+    if (node) {
+        deleteTreap(node->childl);
+        deleteTreap(node->childr);
         delete node;
         node = nullptr;
     }
@@ -167,9 +164,9 @@ template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::bubbleUp(TreapBST::Node<KeyType, ValueType> *node) {
     if (node != root && node->priority > node->parent->priority) {
         if (node == node->parent->childl) {             // Left child, right rotation
-            rotateRight(node);
+            rotateRight(*&node);
         } else {                                        // Right child, left rotation
-            rotateLeft(node);
+            rotateLeft(*&node);
         }
         bubbleUp(node);
     }
@@ -178,7 +175,7 @@ void TreapBST<KeyType, ValueType>::bubbleUp(TreapBST::Node<KeyType, ValueType> *
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::rotateLeft(TreapBST::Node<KeyType, ValueType> *node) {
     auto temp = node->parent;
-    Node<KeyType, ValueType> *parentParent = nullptr;
+    Node <KeyType, ValueType> *parentParent = nullptr;
 
     if (temp != root) {
         parentParent = temp->parent;
@@ -204,7 +201,7 @@ void TreapBST<KeyType, ValueType>::rotateLeft(TreapBST::Node<KeyType, ValueType>
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::rotateRight(TreapBST::Node<KeyType, ValueType> *node) {
     auto temp = node->parent;
-    Node<KeyType, ValueType> *parentParent = nullptr;
+    Node <KeyType, ValueType> *parentParent = nullptr;
 
     if (temp != root) {
         parentParent = temp->parent;
@@ -257,19 +254,13 @@ void TreapBST<KeyType, ValueType>::swap(TreapBST<KeyType, ValueType> &left, Trea
 }
 
 template<typename KeyType, typename ValueType>
-void TreapBST<KeyType, ValueType>::copyNodes(TreapBST::Node<KeyType, ValueType> *root,
-                                             const TreapBST::Node<KeyType, ValueType> *copyRoot) {
-    if (root && copyRoot) {
-        if (copyRoot->childl) {
-            root->childl = new Node<KeyType, ValueType>(copyRoot->childl->key, copyRoot->childl->data, root);
-            root->childl->priority = copyRoot->childl->priority;
-        }
-        if (copyRoot->childr) {
-            root->childr = new Node<KeyType, ValueType>(copyRoot->childr->key, copyRoot->childr->data, root);
-            root->childr->priority = copyRoot->childr->priority;
-        }
-        copyNodes(root->childl, copyRoot->childl);
-        copyNodes(root->childr, copyRoot->childr);
+void
+TreapBST<KeyType, ValueType>::copyNodes(Node <KeyType, ValueType> *&node, const Node <KeyType, ValueType> *copyRoot) {
+    if (copyRoot) {
+        node = new Node<KeyType, ValueType>(copyRoot->key, copyRoot->data, copyRoot->parent);
+        node->priority = copyRoot->priority;
+        copyNodes(node->childl, copyRoot->childl);
+        copyNodes(node->childr, copyRoot->childr);
     }
 }
 
@@ -286,10 +277,8 @@ void TreapBST<KeyType, ValueType>::printNodes(const std::string &prefix, const T
 
         std::cout << (isLeft ? "├──" : "└──");
 
-        // print the value of the node
         std::cout << node->key << ", " << node->priority << std::endl;
 
-        // enter the next tree level - left and right branch
         printNodes(prefix + (isLeft ? "│   " : "    "), node->childl, true);
         printNodes(prefix + (isLeft ? "│   " : "    "), node->childr, false);
     }
@@ -297,10 +286,57 @@ void TreapBST<KeyType, ValueType>::printNodes(const std::string &prefix, const T
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::split(const TreapBST t, const KeyType key, TreapBST &lt, TreapBST &rt) {
+    splitTree(t.root, key, *&lt.root, *&rt.root);
+}
 
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::splitTree(TreapBST::Node<KeyType, ValueType> *node, KeyType key,
+                                             TreapBST::Node<KeyType, ValueType> *&left,
+                                             TreapBST::Node<KeyType, ValueType> *&right) {
+    if (!node) {
+        left = nullptr;
+        right = nullptr;
+    } else if (node->key <= key) {
+        splitTree(node->childr, key, node->childr, right);
+        Node <KeyType, ValueType> *copy;
+        copyNodes(copy, node);
+        if (copy->childl) {
+            copy->childl->parent = copy;
+        }
+        left = copy;
+    } else {
+        splitTree(node->childl, key, left, node->childl);
+        copyNodes(right, node);
+        Node <KeyType, ValueType> *copy;
+        copyNodes(copy, node);
+        if (copy->childr) {
+            copy->childr->parent = copy;
+        }
+        right = copy;
+    }
 }
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::merge(TreapBST &t, const TreapBST lt, const TreapBST rt) {
+//    mergeTree(t.root, *&lt.root, *&rt.root);
+}
 
+template<typename KeyType, typename ValueType>
+void TreapBST<KeyType, ValueType>::mergeTree(TreapBST::Node<KeyType, ValueType> *node,
+                                             TreapBST::Node<KeyType, ValueType> *&left,
+                                             TreapBST::Node<KeyType, ValueType> *&right) {
+    if (!left || !right) {
+        if (left) {
+//            Node<KeyType, ValueType> *copy;
+            copyNodes(node, left);
+        } else {
+            copyNodes(node, right);
+        }
+    } else if (left->parent->key > right->parent->key) {
+        merge(left->childr, left->childr, right);
+        copyNodes(node, left);
+    } else {
+        merge(right->childl, left, right->childl);
+        copyNodes(node, right);
+    }
 }

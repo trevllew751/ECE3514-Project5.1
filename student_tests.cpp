@@ -11,18 +11,18 @@ TEST_CASE("Test default constructor", "[Treap]") {
 TEST_CASE("Test insert", "[Treap]") {
     TreapBST<int, int> tr;
     tr.insert(100, 200);
-    tr.print();
+//    tr.print();
     tr.insert(101, 200);
-    tr.print();
+//    tr.print();
     REQUIRE(tr.height() == 1);
     tr.insert(102, 200);
-    tr.print();
+//    tr.print();
     tr.insert(103, 200);
-    tr.print();
+//    tr.print();
     tr.insert(90, 200);
-    tr.print();
+//    tr.print();
     tr.insert(85, 200);
-    tr.print();
+//    tr.print();
     REQUIRE_FALSE(tr.empty());
 }
 
@@ -32,21 +32,34 @@ TEST_CASE("Test remove", "[Treap]") {
     REQUIRE_FALSE(tr.empty());
     tr.remove(100);
     REQUIRE(tr.empty());
+    tr.insert(90, 200);
+    tr.insert(75, 200);
+    tr.insert(50, 200);
     tr.insert(100, 200);
     tr.insert(101, 200);
     tr.insert(102, 200);
     tr.insert(103, 200);
     tr.insert(99, 200);
     tr.insert(80, 200);
-    tr.print();
+//    tr.print();
     tr.remove(103);
-    tr.print();
+//    tr.print();
     tr.remove(102);
-    tr.print();
+//    tr.print();
     tr.remove(101);
-    tr.print();
+//    tr.print();
     tr.remove(100);
-    tr.print();
+//    tr.print();
+    tr.remove(90);
+//    tr.print();
+    tr.remove(75);
+//    tr.print();
+    tr.remove(50);
+//    tr.print();
+    tr.remove(99);
+//    tr.print();
+    tr.remove(80);
+    REQUIRE(tr.empty());
 }
 
 TEST_CASE("Test search", "[Treap]") {
@@ -78,9 +91,45 @@ TEST_CASE("Test copy constructor and assignment operator", "[Treap]") {
     tr.insert(101, 200);
     tr.insert(102, 200);
     tr.insert(103, 200);
-    tr.print();
+//    tr.print();
     TreapBST<int, int> tr1(tr);
-    tr1.print();
+//    tr1.print();
     TreapBST<int, int> tr2 = tr1;
-    tr2.print();
+//    tr2.print();
+
+    TreapBST<int, int> tr3;
+    TreapBST<int, int> tr4(tr3);
+}
+
+TEST_CASE("Test split", "[Treap]") {
+    TreapBST<int, int> tr;
+    TreapBST<int, int> right;
+    TreapBST<int, int> left;
+    tr.insert(7, 100);
+    tr.insert(3, 100);
+    tr.insert(8, 100);
+    tr.insert(6, 100);
+    tr.insert(5, 100);
+    tr.insert(9, 100);
+    tr.print();
+    tr.split(tr, 5, left, right);
+    left.print();
+    right.print();
+
+}
+
+TEST_CASE("Test merge", "[Treap]") {
+//    TreapBST<int, int> tr;
+//    TreapBST<int, int> right;
+//    TreapBST<int, int> left;
+//    right.insert(5, 100);
+//    right.insert(4, 100);
+//    right.insert(6, 100);
+//    left.insert(2, 100);
+//    left.insert(3, 100);
+//    left.insert(1, 100);
+//    right.print();
+//    left.print();
+//    tr.merge(tr, left, right);
+//    tr.print();
 }
