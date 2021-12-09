@@ -97,6 +97,11 @@ void TreapBST<KeyType, ValueType>::insert(const KeyType &key, const ValueType &v
 
 template<typename KeyType, typename ValueType>
 void TreapBST<KeyType, ValueType>::remove(const KeyType &key) {
+    bool found = false;
+    searchTree(root, key, found);
+    if (!found) {
+        throw std::logic_error("Error: Key not in tree");
+    }
     removeKey(root, key);
 }
 
